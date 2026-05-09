@@ -52,6 +52,7 @@ public class CastleWarsCommand {
                             entity.sendMessage("You have worked for " + rate + " hours");
                             return Command.SINGLE_SUCCESS;
                         })));
+
         return castleWars;
     }
 }
