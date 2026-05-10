@@ -8,6 +8,7 @@ import io.papermc.paper.command.brigadier.Commands;
 import me.emumaps.managers.KitManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class KitSystem {
     KitManager kitManager;
@@ -31,7 +32,7 @@ public class KitSystem {
                                     }
                                     if (player.hasPermission("castlewars.kit.save")) {
                                         player.sendMessage("You have saved the kit " + kitName);
-                                        this.kitManager.addKit(kitName,player.getInventory());
+                                        this.kitManager.addKit(kitName,player.getInventory().getContents());
                                     }
                                     else {
                                         player.sendMessage("You do not have permission to save kits");
@@ -48,14 +49,14 @@ public class KitSystem {
                             if(entity == null) return 0;
                             String kitName = ctx.getArgument("Kit Name", String.class);
                             if(entity instanceof Player player) {
-                                if(kitManager.kitExists(kitName)) {
-                                    player.sendMessage("You have loaded the kit " + kitName);
-                                    return Command.SINGLE_SUCCESS;
-                                }
-                                else {
+                                ItemStack[] items = this.kitManager.loadKit(kitName);
+                                if(items == null) {
                                     player.sendMessage("That kit does not exist");
                                     return 0;
                                 }
+                                player.sendMessage("You have loaded the kit " + kitName);
+                                player.getInventory().setContents(items);
+                                return 0;
                             }
                             else {
                                 return 0;

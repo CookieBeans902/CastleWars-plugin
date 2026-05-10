@@ -1,28 +1,21 @@
 package me.emumaps.managers;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.Map;
 
 public class KitManager {
-    Map<String,Boolean> kitNames;
+    Map<String,byte[]> kits;
     public KitManager() {
-        kitNames = new java.util.HashMap<>();
+        kits = new java.util.HashMap<>();
     }
-    public void loadKit() {
-
+    public ItemStack[] loadKit(String kitName) {
+        byte[] inv = kits.get(kitName);
+        ItemStack[] decodedInv = ItemStack.deserializeItemsFromBytes(inv);
+        return decodedInv;
     }
-    public Boolean kitExists(String kitName) {
-        if(kitNames.get(kitName)!= null) {
-          return true;
-        }
-        return false;
-    }
-    public void addKit(String kitName, PlayerInventory inventory) {
-        kitNames.put(kitName,true);
-        ItemStack itemStack = new ItemStack(Material.DIAMOND_CHESTPLATE);
-        inventory.setChestplate(itemStack);
+    public void addKit(String kitName, ItemStack[] inventory) {
+        byte[] encodedInv = ItemStack.serializeItemsAsBytes(inventory);
+        kits.put(kitName,encodedInv);
     }
 }
