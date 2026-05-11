@@ -2,11 +2,7 @@ name: CastleWars
 description: This is minigame created by EMU mapmaking as a passion project.
 version: '${version}'
 authors: [CookieBeans902]
-
-commands:
-  castlewars:
-    aliases: [cw]
-
+depend: [LuckPerms]
 main: me.emumaps.castlewars.CastleWars
 paperPluginLoader: me.emumaps.castlewars.CastleWarsLoader
 api-version: '1.21.11'
