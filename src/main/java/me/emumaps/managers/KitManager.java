@@ -1,6 +1,6 @@
 package me.emumaps.managers;
 
-import me.emumaps.utilities.Kit;
+import me.emumaps.utils.Kit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.PlayerInventory;

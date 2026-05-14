@@ -10,13 +10,12 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.FinePositionResolver;
 import io.papermc.paper.math.FinePosition;
-import me.emumaps.castlewars.CastleWars;
 import me.emumaps.managers.KitManager;
+import me.emumaps.utils.Keys;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mannequin;
 import org.bukkit.entity.Player;
@@ -64,8 +63,7 @@ public class KitCommands {
         npc.setCustomNameVisible(true);
         PersistentDataContainer pdc = npc.getPersistentDataContainer();
         npc.setDescription(description);
-        NamespacedKey kitKey = new NamespacedKey(CastleWars.getInstance(), "kit_name");
-        pdc.set(kitKey, PersistentDataType.STRING, ctx.getArgument(KIT_NAME, String.class));
+        pdc.set(Keys.KIT_KEY, PersistentDataType.STRING, ctx.getArgument(KIT_NAME, String.class));
         boolean success = kitManager.loadEquipment(npc.getEquipment(), ctx.getArgument(KIT_NAME, String.class));
         if (!success) {
             ctx.getSource().getExecutor().sendMessage(KIT_LOAD_ERROR);

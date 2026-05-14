@@ -1,8 +1,7 @@
 package me.emumaps.listeners;
 
-import me.emumaps.castlewars.CastleWars;
 import me.emumaps.managers.KitManager;
-import org.bukkit.NamespacedKey;
+import me.emumaps.utils.Keys;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mannequin;
 import org.bukkit.event.EventHandler;
@@ -23,9 +22,8 @@ public class KitListener implements Listener {
         if(event.getRightClicked().getType() != EntityType.MANNEQUIN) return;
         Mannequin npc = (Mannequin) event.getRightClicked();
 
-        NamespacedKey kitKey = new NamespacedKey(CastleWars.getInstance(),"kit_name");
-        if(!npc.getPersistentDataContainer().has(kitKey, PersistentDataType.STRING)) return;
-        String kitName = npc.getPersistentDataContainer().get(kitKey, PersistentDataType.STRING);
+        if(!npc.getPersistentDataContainer().has(Keys.KIT_KEY, PersistentDataType.STRING)) return;
+        String kitName = npc.getPersistentDataContainer().get(Keys.KIT_KEY, PersistentDataType.STRING);
         kitManager.loadKit(event.getPlayer(),kitName);
     }
 
