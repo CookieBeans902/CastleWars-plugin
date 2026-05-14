@@ -1,21 +1,47 @@
 package me.emumaps.managers;
 
-import org.bukkit.inventory.ItemStack;
+import me.emumaps.utils.Kit;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.PlayerInventory;
 
+import java.util.List;
 import java.util.Map;
 
 public class KitManager {
-    Map<String,byte[]> kits;
+    Map<String, Kit> kits;
+
     public KitManager() {
         kits = new java.util.HashMap<>();
     }
-    public ItemStack[] loadKit(String kitName) {
-        byte[] inv = kits.get(kitName);
-        ItemStack[] decodedInv = ItemStack.deserializeItemsFromBytes(inv);
-        return decodedInv;
+
+    public boolean kitExists(String kitName) {
+        return kits.containsKey(kitName.toLowerCase());
     }
-    public void addKit(String kitName, ItemStack[] inventory) {
-        byte[] encodedInv = ItemStack.serializeItemsAsBytes(inventory);
-        kits.put(kitName,encodedInv);
+
+    public List<String> getKitNames() {
+        return kits.values().stream().map(Kit::getDisplayName).toList();
+    }
+
+    public boolean loadKit(Player player, String kitName) {
+        Kit kit = kits.get(kitName.toLowerCase());
+        if (kit == null) {
+            return false;
+        }
+        kit.applyKit(player.getInventory());
+        return true;
+    }
+
+    public boolean loadEquipment(EntityEquipment inv, String kitName) {
+        Kit kit = kits.get(kitName.toLowerCase());
+        if (kit == null) {
+            return false;
+        }
+        kit.applyEquipment(inv);
+        return true;
+    }
+
+    public void addKit(String kitName, PlayerInventory inventory) {
+        kits.put(kitName.toLowerCase(), new Kit(kitName,inventory));
     }
 }
