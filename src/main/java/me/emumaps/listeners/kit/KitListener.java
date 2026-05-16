@@ -1,4 +1,4 @@
-package me.emumaps.listeners;
+package me.emumaps.listeners.kit;
 
 import me.emumaps.managers.KitManager;
 import me.emumaps.utils.Keys;
@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.Objects;
 
 public class KitListener implements Listener {
 
@@ -24,6 +26,7 @@ public class KitListener implements Listener {
 
         if(!npc.getPersistentDataContainer().has(Keys.KIT_KEY, PersistentDataType.STRING)) return;
         String kitName = npc.getPersistentDataContainer().get(Keys.KIT_KEY, PersistentDataType.STRING);
+        Objects.requireNonNull(kitName);
         kitManager.loadKit(event.getPlayer(),kitName);
     }
 

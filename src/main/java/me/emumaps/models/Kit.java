@@ -1,4 +1,4 @@
-package me.emumaps.utils;
+package me.emumaps.models;
 
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
