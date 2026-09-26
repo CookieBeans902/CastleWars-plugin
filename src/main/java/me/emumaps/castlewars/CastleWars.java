@@ -6,9 +6,9 @@ import me.emumaps.commands.CastleWarsCommand;
 import me.emumaps.commands.KitCommands;
 import me.emumaps.config.BeaconBaseBlocks;
 import me.emumaps.listeners.kit.KitListener;
+import me.emumaps.listeners.mechanics.Combat;
 import me.emumaps.listeners.mechanics.NexusListener;
 import me.emumaps.listeners.world.ArenaProtection;
-import me.emumaps.managers.GameManager;
 import me.emumaps.managers.KitManager;
 import me.emumaps.utils.Keys;
 import org.bukkit.event.Listener;
@@ -19,18 +19,18 @@ public final class CastleWars extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         Keys.init(this);
-        GameManager gameManager = new GameManager();
         KitManager kitManager = new KitManager();
         BeaconBaseBlocks beaconBaseBlocks = new BeaconBaseBlocks();
 
         getServer().getPluginManager().registerEvents(new KitListener(kitManager), this);
         getServer().getPluginManager().registerEvents(new NexusListener(beaconBaseBlocks),this);
         getServer().getPluginManager().registerEvents(new ArenaProtection(),this);
+        getServer().getPluginManager().registerEvents(new Combat(), this);
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             // register your commands here ...
             final Commands registrar = event.registrar();
-            new CastleWarsCommand(gameManager, registrar);
+            new CastleWarsCommand(registrar);
             new KitCommands(kitManager, registrar);
         });
     }

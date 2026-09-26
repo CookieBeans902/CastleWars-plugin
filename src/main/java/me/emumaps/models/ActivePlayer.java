@@ -1,27 +1,17 @@
 package me.emumaps.models;
 
-import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class ActivePlayer {
-    private final UUID playerId;
-    private String teamColor;
-    private int kills;
-    private int deaths;
-    private int score;
+    public UUID uuid;
+    public String teamColor;
+    public int kills;
+    public int deaths;
+    public int captures;
+    public int steals;
 
-    public void setTeamColor(String teamColor) {
+    public ActivePlayer(UUID uuid, String teamColor) {
+        this.uuid = uuid;
         this.teamColor = teamColor;
     }
-
-    public ActivePlayer(@Nonnull UUID playerId, @Nonnull String teamColor) {
-        this.playerId = playerId;
-        this.teamColor = teamColor;
-        this.kills = 0;
-        this.deaths = 0;
-        this.score = 0;
-    }
-
-
 }
-

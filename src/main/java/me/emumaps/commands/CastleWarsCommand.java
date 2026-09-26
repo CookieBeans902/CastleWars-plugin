@@ -10,6 +10,7 @@ import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import io.papermc.paper.command.brigadier.argument.resolvers.BlockPositionResolver;
 import io.papermc.paper.math.BlockPosition;
 import me.emumaps.managers.GameManager;
+import me.emumaps.models.ActivePlayer;
 import me.emumaps.utils.Keys;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -22,8 +23,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
 public class CastleWarsCommand {
-    GameManager gameManager;
 
     private int give(CommandContext<CommandSourceStack> ctx) {
         Bukkit.broadcast(Component.text("Important Announcement!", NamedTextColor.GOLD));
@@ -34,8 +38,7 @@ public class CastleWarsCommand {
         return Command.SINGLE_SUCCESS;
     }
 
-    public CastleWarsCommand(GameManager gameManager, Commands registrar) {
-        this.gameManager = gameManager;
+    public CastleWarsCommand(Commands registrar) {
 
         LiteralArgumentBuilder<CommandSourceStack> root = createCommand();
 
@@ -89,8 +92,23 @@ public class CastleWarsCommand {
                         return 0;
                     }
                 )
+            )
+            .then(Commands.literal("gametest")
+                .executes(ctx -> {
+                    HashMap<UUID, ActivePlayer> data = new HashMap<>();
+                    Entity entity = ctx.getSource().getExecutor();
+                    ArrayList<String> teamColors = new ArrayList<>();
+                    if(entity instanceof Player player) {
+                        ActivePlayer player1 = new ActivePlayer(player.getUniqueId(), "red");
+                        data.put(player.getUniqueId(), player1);
+                        teamColors.add("red");
+                    }
+                    GameManager gameManager = new GameManager(data, teamColors);
+                    gameManager.NexusCapture("Red");
+                    gameManager.NexusLost("Blue");
+                    return Command.SINGLE_SUCCESS;
+                })
             );
-
         return castleWars;
     }
 }

@@ -8,8 +8,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class ArenaProtection implements Listener {
 
@@ -37,8 +37,8 @@ public class ArenaProtection implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     // Prevent players from throwing items that are not allowed
-    public void onItemThrow(EntityDropItemEvent event) {
-        if(event.getEntity().hasPermission("castlewars.debug.bypass")) return;
+    public void onItemThrow(PlayerDropItemEvent event) {
+        if(event.getPlayer().hasPermission(Permissions.DEBUG_BYPASS)) return;
         if(event.getItemDrop().getItemStack().getType() != Material.BEACON) {
             event.setCancelled(true);
         }
@@ -47,9 +47,10 @@ public class ArenaProtection implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     // Prevent players from picking up items that are not allowed as an extra measure.
     public void onItemPickup(EntityPickupItemEvent event) {
-        if(event.getEntity().hasPermission("castlewars.debug.bypass")) return;
+        if(event.getEntity().hasPermission(Permissions.DEBUG_BYPASS)) return;
         if(event.getItem().getItemStack().getType() != Material.BEACON) {
             event.setCancelled(true);
         }
     }
+
 }

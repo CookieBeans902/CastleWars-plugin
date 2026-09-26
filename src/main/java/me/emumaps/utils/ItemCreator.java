@@ -14,7 +14,6 @@ public class ItemCreator {
         /* This utility class should not be instantiated */
     }
 
-
     public static ItemStack createNexusBeacon(String beaconKey) {
         ItemStack beacon = new ItemStack(Material.BEACON);
         BlockStateMeta beaconMeta = (BlockStateMeta)beacon.getItemMeta();

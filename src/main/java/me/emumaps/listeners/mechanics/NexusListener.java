@@ -2,10 +2,7 @@ package me.emumaps.listeners.mechanics;
 
 import me.emumaps.castlewars.CastleWars;
 import me.emumaps.config.BeaconBaseBlocks;
-import me.emumaps.utils.EffectProvider;
-import me.emumaps.utils.ItemCreator;
-import me.emumaps.utils.Keys;
-import me.emumaps.utils.Permissions;
+import me.emumaps.utils.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -14,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.TileState;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.NonNull;
@@ -41,7 +38,7 @@ public class NexusListener implements Listener {
         if (!(event.getEntity() instanceof Player player)) {
             return;
         }
-        if (player.hasPermission(Permissions.DEBUG_BYPASS)) return;
+//        if (player.hasPermission(Permissions.DEBUG_BYPASS)) return;
         ItemStack item = event.getItem().getItemStack();
         String teamColor = player.getPersistentDataContainer().get(Keys.TEAM_COLOR_KEY, PersistentDataType.STRING);
         ItemStack beaconItem = ItemCreator.createNexusBeacon(teamColor);
@@ -57,7 +54,7 @@ public class NexusListener implements Listener {
         Player player = event.getPlayer();
 
         // Debug Bypass
-        if (player.hasPermission(Permissions.DEBUG_BYPASS)) return;
+//        if (player.hasPermission(Permissions.DEBUG_BYPASS)) return;
 
         Block block = event.getBlock();
         event.setDropItems(false);
@@ -84,18 +81,14 @@ public class NexusListener implements Listener {
             event.setCancelled(true);
             return;
         }
-
-        ItemStack item = ItemCreator.createNexusBeacon(playerTeam);
-        Item itemEntity = player.getWorld().dropItemNaturally(block.getLocation(), item);
-        itemEntity.setGlowing(true);
-
+        NexusUtils.spawnNexusItem(block.getLocation(), 1);
         Bukkit.getScheduler().runTask(CastleWars.getInstance(), () -> EffectProvider.updateGlowingEffect(player));
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBeaconPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
-        if (player.hasPermission(Permissions.DEBUG_BYPASS)) return;
+//        if (player.hasPermission(Permissions.DEBUG_BYPASS)) return;
         Block belowBlock = event.getBlockPlaced().getRelative(BlockFace.DOWN);
         String teamColor = player.getPersistentDataContainer().get(Keys.TEAM_COLOR_KEY, PersistentDataType.STRING);
         Objects.requireNonNull(teamColor);
@@ -108,5 +101,12 @@ public class NexusListener implements Listener {
             return;
         }
         Bukkit.getScheduler().runTask(CastleWars.getInstance(), () -> EffectProvider.updateGlowingEffect(player));
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onBeaconDrop(PlayerDropItemEvent event) {
+//        if (player.hasPermission(Permissions.DEBUG_BYPASS)) return;
+        Bukkit.getScheduler().runTask(CastleWars.getInstance(), () -> EffectProvider.updateGlowingEffect(event.getPlayer()));
+        event.getItemDrop().setGlowing(true);
     }
 }
